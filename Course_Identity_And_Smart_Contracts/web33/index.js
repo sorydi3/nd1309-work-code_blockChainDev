@@ -1,6 +1,6 @@
 let web3 = require('web3');
 let Ethereuntx = require('@ethereumjs/tx');
-const common = require('ethereumjs-common').Common
+const common = require('ethereumjs-common');
 //let Contract = require('web3-eth-Contract');
 
 let url = 'http://127.0.0.1:8545'; // ganache local blockchain url
@@ -57,10 +57,10 @@ let rawTransaction = {
 
 console.log(`TRANSACTION BEING CARRIED OUT IS THE FOLLOWING: ${rawTransaction}`);
  
-var EtherTransaction = new Ethereuntx.Transaction(rawTransaction,{common: customCommon},); // CREATING A RAW TRANSACTION
-EtherTransaction.sign(PKHex); // SENDER SIGNING THE TRANSACTION
+//var EtherTransaction = new Ethereuntx.Transaction(rawTransaction,{common: customCommon},); // CREATING A RAW TRANSACTION
+//EtherTransaction.sign(PKHex); // SENDER SIGNING THE TRANSACTION
 
 //NOW WE SEND THE TRANSACTION TO THE NEWORK, IN OUR CASE IN THE LOCAL GANACHE NETWORK.
-let serializedTransaction = EtherTransaction.serialize();
-WEB3.eth.sendSignedTransaction(serializedTransaction);
+//let serializedTransaction = EtherTransaction.serialize();
+//WEB3.eth.sendSignedTransaction(serializedTransaction);
 
