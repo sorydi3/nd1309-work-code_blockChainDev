@@ -1,5 +1,5 @@
 let web3 = require('web3');
-let Ethereuntx = require('@ethereumjs/tx');
+let Ethereuntx = require('@ethereumjs/tx').Transaction;
 const common = require('ethereumjs-common');
 //let Contract = require('web3-eth-Contract');
 
@@ -32,19 +32,29 @@ WEB3.eth.getTransactionCount(ReceavingAddress).then((count) =>{
 WEB3.eth.getAccounts().then((count) =>{
     console.log(`DISPLAY THE NUMBER AVAILABLE IN THE CHAIN: ${count}`);
 });
-
+// get the chain id
 const networkId =   WEB3.eth.net.getId();
 const chainId =  WEB3.eth.getChainId();
 
-const customCommon = common.forCustomChain(
-    'mainnet',
+// declare a custom common for the local chain
+const customCommon = new common.default(
     {
-      name: 'my-network',
-      networkId: networkId,
-      chainId: chainId,
-    },
-    'petersburg',
-  );
+        chain : 'custom',
+        chainId : chainId,
+        networkId : networkId,
+        network : 'custom'
+    }
+);
+
+//const customCommon = common.forCustomChain(
+//    'mainnet',
+ //   {
+ //     name: 'my-network',
+ //     networkId: networkId,
+ //     chainId: chainId,
+//    },
+ //   'petersburg',
+//  );
 
 let rawTransaction = {
     nonce : 0,
@@ -52,10 +62,34 @@ let rawTransaction = {
     gasPrice : 2000000,
     gasLimit : 30000,
     value :1,
-    data : ""
+    data : "",
+    chainId : chainId,
+    networkId : networkId,
+    common : customCommon
 }
 
+// CREATE THE TRANSACTION
+let tx = new Ethereuntx(rawTransaction,customCommon);
+//sign the transaction
+tx.sign(PKHex);
+
+//broadcast the transaction
+WEB3.eth.sendSignedTransaction('0x' + tx.serialize().toString('hex')).then((receipt) =>{
+    console.log(`THE TRANSACTION HAS BEEN SENT SUCCESSFULLY: ${receipt}`);
+}).catch((err) =>{
+    console.log(`ERROR: ${err}`);
+});
+
+// create a common object
+
+
 console.log(`TRANSACTION BEING CARRIED OUT IS THE FOLLOWING: ${rawTransaction}`);
+
+// sumbit the transaction
+
+// create a transaction object
+
+
  
 //var EtherTransaction = new Ethereuntx.Transaction(rawTransaction,{common: customCommon},); // CREATING A RAW TRANSACTION
 //EtherTransaction.sign(PKHex); // SENDER SIGNING THE TRANSACTION
